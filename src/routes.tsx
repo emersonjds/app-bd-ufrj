@@ -11,15 +11,15 @@ const Routes = () => {
     <NavigationContainer>
       <Stack.Navigator>
         <Stack.Screen
-          name="Initial"
-          component={Initial}
+          name="Home"
+          component={Home}
           options={{
             headerShown: false,
           }}
         />
-         <Stack.Screen
-          name="Home"
-          component={Home}
+        <Stack.Screen
+          name="Initial"
+          component={Initial}
           options={{
             headerShown: false,
           }}
@@ -28,3 +28,5 @@ const Routes = () => {
     </NavigationContainer>
   );
 };
+
+export default Routes;
