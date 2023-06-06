@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Text, View } from "react-native";
 import { VictoryPie } from "victory-native";
 import { ActivityIndicator, Button, Divider } from "react-native-paper";
@@ -58,7 +58,13 @@ const Home = () => {
         {loading ? (
           <ActivityIndicator size="large" color="#0000ff" />
         ) : (
-          <Button mode="contained" onPress={() => startAnalysis()}>
+          <Button
+            mode="contained"
+            onPress={() => startAnalysis()}
+            style={{
+              backgroundColor: "#0000ff",
+            }}
+          >
             Iniciar Análise
           </Button>
         )}
