@@ -1,25 +1,34 @@
 import { useEffect, useState } from "react";
 import { Text, View } from "react-native";
 import { VictoryPie } from "victory-native";
-import { ActivityIndicator, Button } from "react-native-paper";
+import { ActivityIndicator, Button, Divider } from "react-native-paper";
 
 import api from "../../service/api";
+import { Box } from "../../components/Spacing";
 
 const Home = () => {
-  const graphicData = [
-    { y: 22, x: "22%" },
-    { y: 88, x: "88%" },
-  ];
   const graphicColor = ["red", "blue"];
-  const [dataSet, setDataSet] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [graphicData, setGraphicData] = useState([{}]);
+  const [accuracy, setAccuracy] = useState("0.0");
 
   const getDataFromPython = async () => {
     try {
       setLoading(true);
-      const response = await api.get("/spark");
-      console.log("RETORNO", response.data);
-      setDataSet(response.data);
+      const response = await api.get("/test");
+      const { accuracy, count_neg, count_pos } = response.data;
+      setGraphicData([
+        {
+          y: String(count_neg).slice(0, 2),
+          x: `${String(count_neg).slice(0, 2)}%`,
+        },
+        {
+          y: String(count_pos).slice(0, 2),
+          x: `${String(count_pos).slice(0, 2)}%`,
+        },
+      ]);
+      console.log(accuracy);
+      setAccuracy(String(accuracy).slice(0, 4));
       setLoading(false);
     } catch (error) {
       console.log("ERRO", error);
@@ -55,64 +64,34 @@ const Home = () => {
         )}
       </View>
 
-      {loading ? (
-        <Text>Carregando...</Text>
-      ) : (
-        <VictoryPie
-          data={graphicData}
-          width={300}
-          height={350}
-          innerRadius={50}
-          colorScale={graphicColor}
-          style={{
-            labels: {
-              fill: "black",
-              fontSize: 15,
-              padding: 7,
-            },
-          }}
-        />
-      )}
-
-      {/* Feliz */}
-      <View
+      <VictoryPie
+        data={graphicData}
+        width={300}
+        height={350}
+        innerRadius={50}
+        colorScale={graphicColor}
         style={{
-          flexDirection: "row",
-          alignItems: "center",
+          labels: {
+            fill: "black",
+            fontSize: 15,
+            padding: 7,
+          },
         }}
-      >
-        <View
-          style={{
-            height: 20,
-            width: 20,
-            backgroundColor: "red",
-          }}
-        ></View>
+      />
+      <Box mt={10} mb={10}>
         <Text
           style={{
-            marginLeft: 10,
+            marginBottom: 10,
           }}
         >
-          {!loading ? "Carregando..." : "Sentimento de Felicidade"}
+          Acurácia da análise: {loading ? "Carregando..." : `${accuracy}%`}
         </Text>
-      </View>
+        <Divider />
+      </Box>
 
-      {/* Triste */}
-      <View
-        style={{
-          flexDirection: "row",
-          alignItems: "center",
-          marginTop: 10,
-        }}
-      >
-        <View
-          style={{
-            height: 20,
-            width: 20,
-            // borderRadius: 35,
-            backgroundColor: "blue",
-          }}
-        ></View>
+      {/* Feliz */}
+      <Box flexDirection={"row"} alignItems={"center"}>
+        <Box height={20} width={20} borderRadius={35} backgroundColor={"red"} />
         <Text
           style={{
             marginLeft: 10,
@@ -120,7 +99,24 @@ const Home = () => {
         >
           {loading ? "Carregando..." : "Sentimento de Felicidade"}
         </Text>
-      </View>
+      </Box>
+
+      {/* Triste */}
+      <Box flexDirection={"row"} alignItems={"center"} mt={10}>
+        <Box
+          height={20}
+          width={20}
+          borderRadius={35}
+          backgroundColor={"blue"}
+        />
+        <Text
+          style={{
+            marginLeft: 10,
+          }}
+        >
+          {loading ? "Carregando..." : "Sentimento de Tristeza"}
+        </Text>
+      </Box>
     </View>
   );
 };
