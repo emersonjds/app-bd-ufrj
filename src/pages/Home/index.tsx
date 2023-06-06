@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { Text, View } from "react-native";
 import { VictoryPie } from "victory-native";
+import { ActivityIndicator, Button } from "react-native-paper";
+
 import api from "../../service/api";
 
 const Home = () => {
@@ -10,31 +12,23 @@ const Home = () => {
   ];
   const graphicColor = ["red", "blue"];
   const [dataSet, setDataSet] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const getDataFromPython = async () => {
-    // try {
-    //   const response1 = await api.get('/healthcheck')
-    //   console.log('RETORNO', response1.data)
-    // } catch (error) {
-    //   console.log('ERRO', error)
-    // }
-
     try {
-      console.log("CHAMANDO API SPARK");
+      setLoading(true);
       const response = await api.get("/spark");
       console.log("RETORNO", response.data);
       setDataSet(response.data);
+      setLoading(false);
     } catch (error) {
       console.log("ERRO", error);
     }
   };
 
-  useEffect(() => {
-    console.log("CARREGADO");
-    (async () => {
-      await getDataFromPython();
-    })();
-  }, []);
+  const startAnalysis = async () => {
+    await getDataFromPython();
+  };
 
   return (
     <View
@@ -46,20 +40,39 @@ const Home = () => {
     >
       <Text>Trabalho UFRJ</Text>
       <Text>Analise de Sentimentos com Spark ML</Text>
-      <VictoryPie
-        data={graphicData}
-        width={300}
-        height={350}
-        innerRadius={50}
-        colorScale={graphicColor}
+
+      <View
         style={{
-          labels: {
-            fill: "black",
-            fontSize: 15,
-            padding: 7,
-          },
+          marginTop: 20,
         }}
-      />
+      >
+        {loading ? (
+          <ActivityIndicator size="large" color="#0000ff" />
+        ) : (
+          <Button mode="contained" onPress={() => startAnalysis()}>
+            Iniciar Análise
+          </Button>
+        )}
+      </View>
+
+      {loading ? (
+        <Text>Carregando...</Text>
+      ) : (
+        <VictoryPie
+          data={graphicData}
+          width={300}
+          height={350}
+          innerRadius={50}
+          colorScale={graphicColor}
+          style={{
+            labels: {
+              fill: "black",
+              fontSize: 15,
+              padding: 7,
+            },
+          }}
+        />
+      )}
 
       {/* Feliz */}
       <View
@@ -72,7 +85,6 @@ const Home = () => {
           style={{
             height: 20,
             width: 20,
-            // borderRadius: 35,
             backgroundColor: "red",
           }}
         ></View>
@@ -81,7 +93,7 @@ const Home = () => {
             marginLeft: 10,
           }}
         >
-          Sentimento de Tristeza
+          {!loading ? "Carregando..." : "Sentimento de Felicidade"}
         </Text>
       </View>
 
@@ -106,7 +118,7 @@ const Home = () => {
             marginLeft: 10,
           }}
         >
-          Sentimento de Felicidade
+          {loading ? "Carregando..." : "Sentimento de Felicidade"}
         </Text>
       </View>
     </View>
