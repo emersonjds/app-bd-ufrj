@@ -8,7 +8,7 @@ The project proposed to use a cluster with 1.8 million tweets and perform sentim
 Clone the project
 
 ```bash
-  git clone https://github.com/emersonjds/bigdata
+  git clone https://github.com/emersonjds/app-bd-ufrj
 ```
 
 Go to the project directory
