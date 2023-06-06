@@ -5,6 +5,7 @@ import { ActivityIndicator, Button, Divider } from "react-native-paper";
 
 import api from "../../service/api";
 import { Box } from "../../components/Spacing";
+import Header from "../../components/Header";
 
 const Home = () => {
   const graphicColor = ["red", "blue"];
@@ -15,7 +16,8 @@ const Home = () => {
   const getDataFromPython = async () => {
     try {
       setLoading(true);
-      const response = await api.get("/test");
+      // const response = await api.get("/test");
+      const response = await api.get("/spark");
       const { accuracy, count_neg, count_pos } = response.data;
       setGraphicData([
         {
@@ -27,7 +29,6 @@ const Home = () => {
           x: `${String(count_pos).slice(0, 2)}%`,
         },
       ]);
-      console.log(accuracy);
       setAccuracy(String(accuracy).slice(0, 4));
       setLoading(false);
     } catch (error) {
@@ -47,9 +48,7 @@ const Home = () => {
         justifyContent: "center",
       }}
     >
-      <Text>Trabalho UFRJ</Text>
-      <Text>Analise de Sentimentos com Spark ML</Text>
-
+      <Header />
       <View
         style={{
           marginTop: 20,
