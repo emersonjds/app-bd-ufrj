@@ -11,15 +11,15 @@ const Routes = () => {
     <NavigationContainer>
       <Stack.Navigator>
         <Stack.Screen
-          name="Home"
-          component={Home}
+          name="Initial"
+          component={Initial}
           options={{
             headerShown: false,
           }}
         />
         <Stack.Screen
-          name="Initial"
-          component={Initial}
+          name="Home"
+          component={Home}
           options={{
             headerShown: false,
           }}
