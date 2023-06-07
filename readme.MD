@@ -47,6 +47,9 @@ Please adhere to this project's `code of conduct`.
 
 ## Demonstration of use
 
-[![Watch the video](https://drive.google.com/file/d/10xl9k2Zsb07qwvC5_6LDI3i-gmgUfx4T/view?usp=sharing)
+https://github.com/emersonjds/app-bd-ufrj/assets/12503997/9c9390e8-ef41-4b2e-8f15-30a9748cb686
+
+
+
 
 
