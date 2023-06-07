@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Text, View } from "react-native";
+import { Alert, Text, View } from "react-native";
 import { VictoryPie } from "victory-native";
 import { ActivityIndicator, Button, Divider } from "react-native-paper";
 
@@ -12,27 +12,45 @@ const Home = () => {
   const [loading, setLoading] = useState(false);
   const [graphicData, setGraphicData] = useState([{}]);
   const [accuracy, setAccuracy] = useState("0.0");
+  const [total, setTotal] = useState(0);
+  const [countNeg, setCountNeg] = useState(0);
+  const [countPos, setCountPos] = useState(0);
 
   const getDataFromPython = async () => {
+    let totalSum = 0;
+    let calcNeg = 0;
+    let calcPos = 0;
+
     try {
       setLoading(true);
-      // const response = await api.get("/test");
+      //   const response = await api.get("/test");
       const response = await api.get("/spark");
       const { accuracy, count_neg, count_pos } = response.data;
+
+      totalSum = count_neg + count_pos;
+      calcNeg = Number((count_neg / totalSum) * 100);
+      calcPos = Number((count_pos / totalSum) * 100);
+
+      setCountNeg(count_neg);
+      setCountPos(count_pos);
+      setTotal(totalSum);
+
       setGraphicData([
         {
-          y: String(count_neg).slice(0, 2),
-          x: `${String(count_neg).slice(0, 2)}%`,
+          y: `${String(calcNeg).slice(0, 5)}`,
+          x: `${String(calcNeg).slice(0, 5)}%`,
         },
         {
-          y: String(count_pos).slice(0, 2),
-          x: `${String(count_pos).slice(0, 2)}%`,
+          y: `${String(calcPos).slice(0, 5)}`,
+          x: `${String(calcPos).slice(0, 5)}%`,
         },
       ]);
       setAccuracy(String(accuracy).slice(0, 4));
       setLoading(false);
     } catch (error) {
+      setLoading(false);
       console.log("ERRO", error);
+      Alert.alert("Erro", "Ocorreu um erro ao tentar realizar a análise");
     }
   };
 
@@ -78,11 +96,45 @@ const Home = () => {
         style={{
           labels: {
             fill: "black",
-            fontSize: 15,
-            padding: 7,
+            fontSize: 12,
+            padding: 5,
           },
         }}
       />
+
+      <Box mt={10}>
+        <Text
+          style={{
+            marginBottom: 10,
+          }}
+        >
+          {loading ? "Carregando..." : `Quantidade analisada ${total}`}
+        </Text>
+        <Divider />
+      </Box>
+
+      <Box mt={10}>
+        <Text
+          style={{
+            marginBottom: 10,
+          }}
+        >
+          {loading ? "Carregando..." : `Quantidade de Positivos ${countPos}`}
+        </Text>
+        <Divider />
+      </Box>
+
+      <Box mt={10}>
+        <Text
+          style={{
+            marginBottom: 10,
+          }}
+        >
+          {loading ? "Carregando..." : `Quantidade de Negativos ${countNeg}`}
+        </Text>
+        <Divider />
+      </Box>
+
       <Box mt={10} mb={10}>
         <Text
           style={{
