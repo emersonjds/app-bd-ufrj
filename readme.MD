@@ -45,3 +45,8 @@ See `contributing.md` for ways to get started.
 
 Please adhere to this project's `code of conduct`.
 
+## Demonstration of use
+
+[![Watch the video](https://drive.google.com/file/d/10xl9k2Zsb07qwvC5_6LDI3i-gmgUfx4T/view?usp=sharing)
+
+
