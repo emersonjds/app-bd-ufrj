@@ -1,7 +1,7 @@
-import React from "react";
+import React, { FC } from "react";
 import { Text, View } from "react-native";
 
-const Header: React.FC = () => {
+const Header: FC = () => {
   return (
     <>
       <Text>Trabalho UFRJ</Text>
